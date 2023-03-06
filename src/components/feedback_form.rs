@@ -1,5 +1,5 @@
 use super::rating::Rating;
-use crate::store::{set_feedback, set_loading, Feedback, Store};
+use crate::store::{set_feedback, set_loading, set_show_alert, Feedback, Store};
 use uuid::Uuid;
 use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
@@ -60,6 +60,7 @@ pub fn FeedbackForm() -> Html {
             };
 
             set_feedback(new_feedback, dispatch.clone());
+            set_show_alert("Feeback added successfully".to_string(), dispatch.clone());
 
             let text_input = text_input_ref.cast::<HtmlInputElement>().unwrap();
             text_input.set_value("");

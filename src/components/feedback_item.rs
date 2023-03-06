@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yewdux::prelude::*;
 
-use crate::store::{delete_feedback, Feedback, Store};
+use crate::store::{delete_feedback, set_show_alert, Feedback, Store};
 
 #[derive(Debug, PartialEq, Properties)]
 pub struct Props {
@@ -24,7 +24,8 @@ pub fn FeedbackItem(props: &Props) -> Html {
             let confirmed = confirm_delete("Do you really want to delete this item?");
 
             if confirmed {
-                delete_feedback(feedback_id, dispatch);
+                delete_feedback(feedback_id, dispatch.clone());
+                set_show_alert("Feedback deleted successfully".to_string(), dispatch);
             }
         })
     };

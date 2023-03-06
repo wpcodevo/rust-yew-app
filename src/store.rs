@@ -8,11 +8,18 @@ pub struct Feedback {
     pub rating: u8,
 }
 
+#[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]
+pub struct AlertInput {
+    pub show_alert: bool,
+    pub alert_message: String,
+}
+
 #[derive(Default, PartialEq, Serialize, Deserialize, Store, Clone)]
 #[store(storage = "local", storage_tab_sync)]
 pub struct Store {
     pub feedbacks: Vec<Feedback>,
     pub loading: bool,
+    pub alert_input: AlertInput,
 }
 
 pub fn set_feedback(feedback: Feedback, dispatch: Dispatch<Store>) {
@@ -30,5 +37,20 @@ pub fn delete_feedback(id: uuid::Uuid, dispatch: Dispatch<Store>) {
 pub fn set_loading(loading: bool, dispatch: Dispatch<Store>) {
     dispatch.reduce_mut(move |store| {
         store.loading = loading;
+    })
+}
+
+pub fn set_show_alert(message: String, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.alert_input = AlertInput {
+            alert_message: message,
+            show_alert: true,
+        };
+    })
+}
+
+pub fn set_hide_alert(dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.alert_input.show_alert = false;
     })
 }
